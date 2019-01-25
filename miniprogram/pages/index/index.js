@@ -3,7 +3,7 @@ const app = getApp()
 
 Page({
   data: {
-    user_id : '' 
+    user_id : ''
   },
 
   onLoad: function() {

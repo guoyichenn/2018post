@@ -6,7 +6,8 @@ Page({
    */
   data: {
     list: [],
-    height: '180px'
+    height: '180px',
+    noList : false
   },
 
   /**
@@ -40,7 +41,12 @@ Page({
         that.setData({
           list: res.result.result
         })
-        wx.hideLoading()
+        wx.hideLoading();
+        if(!that.data.list.length){
+          that.setData({
+            noList : true
+          })
+        }
       })
       .catch(console.error)
   },

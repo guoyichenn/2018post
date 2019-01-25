@@ -7,4 +7,5 @@
     lazy-load = "true"
     style = "height : {{height}}"
     ></image>
+    <text wx:if = "{{noList}}"> 没有找到2018年db上标的电影矮～，看看是不是id输入有问题 </text>
 </view>
