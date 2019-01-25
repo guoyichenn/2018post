@@ -1,0 +1,6 @@
+/* miniprogram/pages/post/post.wxss */
+.post{
+    width : 33.3%;
+    float: left;
+    display: block;
+}

@@ -1,0 +1,10 @@
+<view class='postContain'>
+    <image 
+    class="post" 
+    src="{{item.url}}"
+    wx:for="{{list}}"
+    wx:key = "{{item.index}}}"
+    lazy-load = "true"
+    style = "height : {{height}}"
+    ></image>
+</view>
