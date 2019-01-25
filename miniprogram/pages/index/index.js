@@ -11,8 +11,6 @@ Page({
   },
 
   onLoad: function() {
-    console.log(1111);
-    console.log(wx.cloud)
     if (!wx.cloud) {
       wx.redirectTo({
         url: '../chooseLib/chooseLib',
@@ -20,19 +18,17 @@ Page({
       return
     }
     wx.cloud.callFunction({
-        // 云函数名称
-        name: 'add',
-        // 传给云函数的参数
-        data: {
-          a: 1,
-          b: 2,
-        },
-      })
-      .then(res => {
-        console.log(222)
-        console.log(res.result) // 3
-      })
-      .catch(console.error)
+      // 云函数名称
+      name: 'getPostList',
+      // 传给云函数的参数
+      data: {
+        user_id: '119105254',
+      },
+    })
+    .then(res => {
+      console.log(res.result)
+    })
+    .catch(console.error)
     // 获取用户信息
     wx.getSetting({
       success: res => {
