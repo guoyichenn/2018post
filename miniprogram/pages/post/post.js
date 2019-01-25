@@ -13,6 +13,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options);
+    wx.showLoading({
+      title: '加载中',
+    })
     let user_id = options.user_id;
     let height =  wx.getSystemInfoSync().windowWidth / 3 * 1.48 + 'px'
     this.setData({
@@ -28,7 +32,7 @@ Page({
       name: 'getPostList',
       // 传给云函数的参数
       data: {
-        user_id: '119105254',
+        user_id
       },
     })
       .then(res => {
@@ -36,7 +40,7 @@ Page({
         that.setData({
           list: res.result.result
         })
-        console.log(that.list);
+        wx.hideLoading()
       })
       .catch(console.error)
   },

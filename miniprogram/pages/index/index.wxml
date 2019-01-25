@@ -1,9 +1,9 @@
 <!--index.wxml-->
 <view class="container">
   <view class="section">
-    <input placeholder="输入你的db id" auto-focus />
+    <input placeholder="输入你的db id" auto-focus bindinput="bindKeyInput"/>
   </view>
-  <button type="primary" size="default">提交</button>
+  <button type="primary" size="default" bindtap = "submit">提交</button>
   <text>如何获取你的db id ⬇️</text>
   <view class="section__ctn">
     <image src="../../images/2421548387163_.pic_hd.jpg"></image>
