@@ -1,13 +1,13 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/post/post"
+    "pages/post/post",
+    "pages/index/index"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "2018海报墙",
+    "navigationBarTitleText": "2019海报墙",
     "navigationBarTextStyle": "black"
   }
 }

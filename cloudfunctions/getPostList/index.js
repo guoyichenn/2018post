@@ -3,12 +3,12 @@ const cloud = require('wx-server-sdk');
 cloud.init()
 
 const db = cloud.database()
-const post2018 = db.collection('post2018')
+const post2019 = db.collection('post2019')
 
 const request = require('request');
 const cheerio = require('cheerio');
-let start_time = '2018-01-01';
-let end_time = '2018-12-31';
+let start_time = '2019-01-01';
+let end_time = '2019-12-31';
 
 let httpForPost = async function (user_id, start) {
     let params = `start=${start}&sort=time&rating=all&filter=all&mode=grid`
@@ -43,7 +43,7 @@ let addCollectionInDb = async function (list, userId) {
         return 'add err'
     }
     let now = Date.now();
-    return post2018.add({
+    return post2019.add({
         // data 字段表示需新增的 JSON 数据
         data: {
             list,
@@ -64,7 +64,7 @@ let addCollectionInDb = async function (list, userId) {
 }
 
 let getUserPost = async function (userId) {
-    return post2018.where({
+    return post2019.where({
         userId,
         isDeleted: false
     })
