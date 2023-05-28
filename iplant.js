@@ -2,6 +2,8 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const XLSX = require("xlsx");
 const _ = require("lodash");
+const XLSX_STYLE = require("xlsx-style");
+const ExcelJS = require("exceljs");
 
 const httpForPlant = async (name) => {
   let url = `https://www.iplant.cn/info/${name}`;
@@ -43,9 +45,7 @@ const httpForPlant = async (name) => {
   );
   let infoLatin = infoLatinRes.data
     .replace(/<span[^>]*>/g, "")
-    .replace(/<\/span>/g, "")
-    .replace(/<b>/g, "")
-    .replace(/<\/b>/g, "");
+    .replace(/<\/span>/g, "");
 
   return { infocname, label, infoLatin, nickName };
 };
@@ -57,7 +57,6 @@ const httpForPlant = async (name) => {
   const worksheet = workbook.Sheets[sheetName];
   const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
   const dataArray = jsonData.slice(1); // Exclude header row
-
   const willUpdateDataArray = _.cloneDeep(dataArray);
   for (let i = 0; i < willUpdateDataArray.length; i++) {
     const item = willUpdateDataArray[i];
@@ -77,9 +76,61 @@ const httpForPlant = async (name) => {
     }
   }
 
-  const workbookNew = XLSX.utils.book_new();
-  const worksheetNew = XLSX.utils.aoa_to_sheet(willUpdateDataArray);
-  XLSX.utils.book_append_sheet(workbookNew, worksheetNew, "Sheet 1");
-  XLSX.writeFile(workbookNew, "./has-ran.xlsx");
-  console.log("all done");
+  // Create a new workbook
+  const workbookNew = new ExcelJS.Workbook();
+
+  // Create a new worksheet
+  const worksheetNew = workbookNew.addWorksheet("Sheet1");
+
+  worksheetNew.addRows(willUpdateDataArray);
+
+  const latinColNumber = 9;
+
+  // Iterate over the AOA data
+  for (let rowIndex = 0; rowIndex < willUpdateDataArray.length; rowIndex++) {
+    // Get the cell in the desired column
+    const cell = worksheetNew.getCell(rowIndex + 1, latinColNumber + 1);
+
+    // Create a rich text segment with the desired formatting
+    // const segment = {
+    //   text: aoaData[rowIndex][columnIndex],
+    //   font: { color: { argb: "FF0000" } },
+    // };
+    const inputString = willUpdateDataArray[rowIndex][latinColNumber];
+
+    // Regular expression pattern to match <b>...</b> tags
+    const tagPattern = /<b>(.*?)<\/b>/g;
+
+    // Regular expression pattern to match non-tag text
+    const segments = [];
+
+    // Find all matches of <b>...</b> tags in the input string
+    const tagMatches = inputString.match(tagPattern);
+    const tagMatchesResult = tagMatches.map((match) =>
+      match.replace(/<\/?b>/g, "")
+    );
+
+    // Find all matches of non-tag text in the input string
+    const textMatches = inputString
+      .split(tagPattern)
+      .filter((text) => text !== "");
+
+    // Iterate over the matches and create the result objects
+    for (let i = 0; i < textMatches.length; i++) {
+      const text = textMatches[i];
+      const isBold = tagMatchesResult.indexOf(text) > -1;
+
+      segments.push({
+        text,
+        font: { italic: isBold },
+      });
+    }
+    cell.value = {
+      richText: segments,
+    };
+  }
+
+  workbookNew.xlsx.writeFile("has-ran.xlsx").then(() => {
+    console.log("File saved!");
+  });
 })();
